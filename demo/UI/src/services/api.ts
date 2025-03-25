@@ -10,7 +10,7 @@ export const submitCustomerData = async (data: CustomerData): Promise<{ success:
   await new Promise(resolve => setTimeout(resolve, 1500));
   
   // Log the data that would be sent to the server
-  console.log('Submitting data to /api/customer-details:', data);
+  console.log('Submitting data to /api/cdetail:', data);
   
   // Simulate a successful response
   // In a real application, you would handle errors appropriately

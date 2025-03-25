@@ -73,7 +73,7 @@ const App = () => {
   // Function to submit data to server
   const submitCustomerData = async () => {
     try {
-      const response = await fetch('/api/customer-details', {
+      const response = await fetch('/api/cdetail', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
