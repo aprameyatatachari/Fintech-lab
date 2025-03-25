@@ -150,9 +150,18 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background-dark">
-      {renderPage()}
-    </div>
+    <>
+      {/* Star Background */}
+      <div className="space-background"></div>
+      
+      {/* Nebula Effect */}
+      <div className="nebula"></div>
+      
+      {/* Content */}
+      <div className="relative z-10">
+        {renderPage()}
+      </div>
+    </>
   );
 };
 

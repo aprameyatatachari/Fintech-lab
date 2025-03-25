@@ -1,9 +1,4 @@
 import React, { useState } from 'react';
-import AnimatedCard from '../components/AnimatedCard';
-import Button from '../components/Button';
-import InputField from '../components/InputField';
-import ProgressBar from '../components/ProgressBar';
-import DatePickerField from '../components/DatePickerField';
 import { CustomerData } from '../App';
 
 interface CustomerNamePageProps {
@@ -17,104 +12,113 @@ const CustomerNamePage: React.FC<CustomerNamePageProps> = ({
   customerData,
   updateCustomerData,
   onNext,
-  onBack,
+  onBack
 }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Validate form
+  const validate = () => {
     const newErrors: Record<string, string> = {};
+    
     if (!customerData.firstName.trim()) {
       newErrors.firstName = 'First name is required';
     }
+    
     if (!customerData.lastName.trim()) {
       newErrors.lastName = 'Last name is required';
     }
     
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
+    if (customerData.dateOfBirth) {
+      const date = new Date(customerData.dateOfBirth);
+      const today = new Date();
+      if (isNaN(date.getTime()) || date >= today) {
+        newErrors.dateOfBirth = 'Please enter a valid date of birth';
+      }
     }
     
-    // If validation passes, go to next page
-    onNext();
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    updateCustomerData({ [name]: value });
-    
-    // Clear error for this field if it exists
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: '' });
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validate()) {
+      onNext();
     }
   };
 
   return (
-    <div className="page-container py-12">
-      <ProgressBar currentStep={1} totalSteps={5} />
+    <div className="page-container">
+      <div className="mb-8 text-center fade-in">
+        <h1 className="text-3xl font-bold gold-text">Personal Information</h1>
+        <p className="mt-2 opacity-80">Let's start with your basic details</p>
+      </div>
       
-      <AnimatedCard>
-        <h1 className="text-2xl font-bold mb-6 text-center">Personal Information</h1>
-        
+      <div className="form-card slide-in">
         <form onSubmit={handleSubmit}>
-          <InputField
-            label="First Name"
-            id="firstName"
-            name="firstName"
-            value={customerData.firstName}
-            onChange={handleChange}
-            placeholder="Enter your first name"
-            error={errors.firstName}
-            required
-          />
-          
-          <InputField
-            label="Middle Name (Optional)"
-            id="middleName"
-            name="middleName"
-            value={customerData.middleName || ''}
-            onChange={handleChange}
-            placeholder="Enter your middle name"
-          />
-          
-          <InputField
-            label="Last Name"
-            id="lastName"
-            name="lastName"
-            value={customerData.lastName}
-            onChange={handleChange}
-            placeholder="Enter your last name"
-            error={errors.lastName}
-            required
-          />
-          
-          <DatePickerField
-            label="Date of Birth"
-            id="dateOfBirth"
-            name="dateOfBirth"
-            value={customerData.dateOfBirth || ''}
-            onChange={handleChange}
-            max={new Date().toISOString().split('T')[0]}
-          />
-          
-          <div className="flex justify-between mt-8">
-            <Button 
-              type="button" 
-              variant="secondary"
+          <div className="mb-6">
+            <label htmlFor="firstName" className="input-label">First Name</label>
+            <input
+              id="firstName"
+              type="text"
+              className="input-field"
+              value={customerData.firstName}
+              onChange={(e) => updateCustomerData({ firstName: e.target.value })}
+            />
+            {errors.firstName && <p className="error-message">{errors.firstName}</p>}
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="middleName" className="input-label">Middle Name (Optional)</label>
+            <input
+              id="middleName"
+              type="text"
+              className="input-field"
+              value={customerData.middleName || ''}
+              onChange={(e) => updateCustomerData({ middleName: e.target.value })}
+            />
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="lastName" className="input-label">Last Name</label>
+            <input
+              id="lastName"
+              type="text"
+              className="input-field"
+              value={customerData.lastName}
+              onChange={(e) => updateCustomerData({ lastName: e.target.value })}
+            />
+            {errors.lastName && <p className="error-message">{errors.lastName}</p>}
+          </div>
+
+          <div className="mb-8">
+            <label htmlFor="dateOfBirth" className="input-label">Date of Birth</label>
+            <input
+              id="dateOfBirth"
+              type="date"
+              className="input-field"
+              value={customerData.dateOfBirth || ''}
+              onChange={(e) => updateCustomerData({ dateOfBirth: e.target.value })}
+            />
+            {errors.dateOfBirth && <p className="error-message">{errors.dateOfBirth}</p>}
+          </div>
+
+          <div className="flex justify-between">
+            <button
+              type="button"
               onClick={onBack}
+              className="btn-secondary"
             >
               Back
-            </Button>
-            
-            <Button type="submit">
+            </button>
+            <button
+              type="submit"
+              className="btn-primary"
+            >
               Continue
-            </Button>
+            </button>
           </div>
         </form>
-      </AnimatedCard>
+      </div>
     </div>
   );
 };
