@@ -1,80 +1,142 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ParallaxBackgroundProps {
   mousePosition: { x: number; y: number };
 }
 
-const ParallaxBackground: React.FC<ParallaxBackgroundProps> = ({ mousePosition }) => {
-  const [scrollPosition, setScrollPosition] = useState(0);
-  
+interface Star {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  color: string;
+  opacity: number;
+  animationDelay: number;
+}
+
+const ParallaxBackground = ({ mousePosition }: ParallaxBackgroundProps) => {
+  const [stars, setStars] = useState<Star[]>([]);
+  const [shootingStars, setShootingStars] = useState<Star[]>([]);
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollPosition(window.scrollY);
+    // Generate random stars
+    const generateStars = () => {
+      const starCount = 100;
+      const newStars: Star[] = [];
+      const colors = ['#FFFFFF', '#A9CCEC', '#D6C4FF'];
+      
+      for (let i = 0; i < starCount; i++) {
+        newStars.push({
+          id: i,
+          x: Math.random() * 100,
+          y: Math.random() * 100,
+          size: Math.random() * 3 + 1,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          opacity: Math.random() * 0.7 + 0.3,
+          animationDelay: Math.random() * 5,
+        });
+      }
+      setStars(newStars);
     };
-    
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
+
+    // Generate shooting stars periodically
+    const generateShootingStars = () => {
+      const newShootingStar = {
+        id: Date.now(),
+        x: Math.random() * 50,
+        y: Math.random() * 50,
+        size: Math.random() * 2 + 1,
+        color: '#FFFFFF',
+        opacity: 0.8,
+        animationDelay: 0,
+      };
+      
+      setShootingStars(prev => [...prev, newShootingStar]);
+      
+      // Remove the shooting star after animation completes
+      setTimeout(() => {
+        setShootingStars(prev => prev.filter(star => star.id !== newShootingStar.id));
+      }, 3000);
     };
+
+    generateStars();
+    
+    // Generate a shooting star every 2-4 seconds
+    const intervalId = setInterval(() => {
+      generateShootingStars();
+    }, Math.random() * 2000 + 2000);
+
+    return () => clearInterval(intervalId);
   }, []);
-  
+
   return (
-    <div className="fixed inset-0 pointer-events-none">
-      {/* Base black background */}
-      <div className="absolute inset-0 bg-background-dark"></div>
-      
-      {/* Neon grid that moves with mouse position */}
+    <div className="fixed inset-0 overflow-hidden">
+      {/* Background gradient */}
       <div 
-        className="absolute inset-0 neon-grid opacity-30"
+        className="absolute inset-0 bg-gradient-to-br from-space-black via-space-blue to-space-purple"
         style={{
-          transform: `translate3d(${mousePosition.x * -20}px, ${mousePosition.y * -20}px, 0)`,
-          transition: 'transform 0.2s ease-out'
+          transform: `translate(${mousePosition.x * -10}px, ${mousePosition.y * -10}px)`,
+          transition: 'transform 0.1s ease',
         }}
-      ></div>
+      />
       
-      {/* Abstract shapes that move with parallax */}
+      {/* Stars */}
+      {stars.map((star) => (
+        <div
+          key={star.id}
+          className="absolute rounded-full animate-twinkling"
+          style={{
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            backgroundColor: star.color,
+            opacity: star.opacity,
+            animationDelay: `${star.animationDelay}s`,
+            transform: `translate(${mousePosition.x * (-5 - star.size * 3)}px, ${mousePosition.y * (-5 - star.size * 3)}px)`,
+            transition: 'transform 0.2s ease',
+          }}
+        />
+      ))}
+      
+      {/* Shooting stars */}
+      {shootingStars.map((star) => (
+        <div
+          key={star.id}
+          className="absolute h-px w-20 animate-shooting-star"
+          style={{
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            backgroundColor: star.color,
+            boxShadow: `0 0 4px ${star.color}`,
+            opacity: star.opacity,
+            transform: 'rotate(45deg)',
+          }}
+        />
+      ))}
+      
+      {/* Additional nebula effects */}
       <div 
-        className="abstract-shape w-96 h-96 rounded-full bg-neon-blue/20"
+        className="absolute w-1/3 h-1/3 rounded-full opacity-10 blur-3xl"
         style={{
-          left: '10%',
+          background: 'radial-gradient(circle, rgba(229,178,43,0.3) 0%, rgba(229,178,43,0) 70%)',
+          left: '15%',
+          top: '30%',
+          transform: `translate(${mousePosition.x * -30}px, ${mousePosition.y * -30}px)`,
+          transition: 'transform 0.5s ease',
+        }}
+      />
+      
+      <div 
+        className="absolute w-1/2 h-1/2 rounded-full opacity-5 blur-3xl"
+        style={{
+          background: 'radial-gradient(circle, rgba(169,204,236,0.3) 0%, rgba(169,204,236,0) 70%)',
+          right: '10%',
           top: '20%',
-          transform: `translate3d(${mousePosition.x * -30}px, ${mousePosition.y * -30 - scrollPosition * 0.05}px, 0)`,
+          transform: `translate(${mousePosition.x * -20}px, ${mousePosition.y * -20}px)`,
+          transition: 'transform 0.4s ease',
         }}
-      ></div>
-      
-      <div 
-        className="abstract-shape w-80 h-80 rounded-full bg-neon-purple/20"
-        style={{
-          right: '15%',
-          top: '10%',
-          transform: `translate3d(${mousePosition.x * -25}px, ${mousePosition.y * -25 - scrollPosition * 0.03}px, 0)`,
-        }}
-      ></div>
-      
-      <div 
-        className="abstract-shape w-64 h-64 rounded-full bg-gold/10"
-        style={{
-          left: '20%',
-          bottom: '10%',
-          transform: `translate3d(${mousePosition.x * -40}px, ${mousePosition.y * -40 + scrollPosition * 0.02}px, 0)`,
-        }}
-      ></div>
-      
-      <div 
-        className="abstract-shape w-56 h-56 rounded-full bg-neon-pink/15"
-        style={{
-          right: '25%',
-          bottom: '20%',
-          transform: `translate3d(${mousePosition.x * -20}px, ${mousePosition.y * -20 + scrollPosition * 0.04}px, 0)`,
-        }}
-      ></div>
-      
-      {/* Overlay with subtle dots pattern */}
-      <div className="absolute inset-0 neon-dots opacity-30"></div>
-      
-      {/* Dark gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background-dark/0 to-background-dark opacity-70"></div>
+      />
     </div>
   );
 };

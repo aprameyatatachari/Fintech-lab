@@ -1,233 +1,122 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
 
-@tailwind utilities;
-@reference "tailwindcss";
-@theme {
-  --color-gold-accent: #ffd700;
-  --color-gold-accent-dark: #e5c100;
-  --color-neon-blue: #4d7cff;
-  --color-neon-purple: #9d4edd;
-  --color-deep-space: #0a0a18;
-  --color-space-dark: #05050e;
-  --color-space-light: #1a1a2e;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0A0E17;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Reset default styles */
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Remove default focus outlines and add custom ones */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid #E5B22B;
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fix date inputs in space theme */
+input[type="date"] {
+  color-scheme: dark;
+}
+
+/* Selection color */
+::selection {
+  background-color: rgba(229, 178, 43, 0.3);
+  color: #ffffff;
+}
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
 }
 
 body {
   margin: 0;
-  font-family: sans-serif;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
   min-height: 100vh;
-  color: rgba(255, 255, 255, 0.9);
-  position: relative;
-  background-color: var(--deep-space);
-  overflow-x: hidden;
 }
 
-/* Star background styles */
-.space-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  background-color: var(--deep-space);
-  background-image: 
-    radial-gradient(1px 1px at 10% 10%, rgba(255, 255, 255, 0.9), transparent),
-    radial-gradient(1px 1px at 20% 20%, rgba(255, 255, 255, 0.8), transparent),
-    radial-gradient(1px 1px at 30% 30%, rgba(255, 255, 255, 0.7), transparent),
-    radial-gradient(2px 2px at 40% 40%, rgba(255, 255, 255, 0.6), transparent),
-    radial-gradient(2px 2px at 50% 50%, rgba(255, 255, 255, 0.5), transparent),
-    radial-gradient(2px 2px at 60% 60%, rgba(255, 255, 255, 0.7), transparent),
-    radial-gradient(1px 1px at 70% 70%, rgba(255, 255, 255, 0.8), transparent),
-    radial-gradient(1px 1px at 80% 80%, rgba(255, 255, 255, 0.6), transparent),
-    radial-gradient(1px 1px at 90% 90%, rgba(255, 255, 255, 0.7), transparent),
-    radial-gradient(1px 1px at 100% 100%, rgba(255, 255, 255, 0.9), transparent),
-    radial-gradient(circle at 15% 50%, rgba(77, 124, 255, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 85% 30%, rgba(157, 78, 221, 0.15) 0%, transparent 40%);
-  background-size: 
-    550px 550px, 550px 550px, 550px 550px, 550px 550px, 550px 550px, 
-    550px 550px, 550px 550px, 550px 550px, 550px 550px, 550px 550px,
-    cover, cover;
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
 }
 
-/* Add a nebula effect */
-.nebula {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  opacity: 0.05;
-  background: 
-    radial-gradient(circle at 30% 30%, var(--neon-purple), transparent 35%),
-    radial-gradient(circle at 70% 70%, var(--neon-blue), transparent 35%);
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
 }
 
-.fade-in {
-  animation: fadeIn 0.6s ease-in;
-}
-
-.slide-in {
-  animation: slideIn 0.5s ease-out;
-}
-
-.pulse {
-  animation: pulse 2s infinite;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideIn {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes pulse {
-  0% { opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { opacity: 0.6; }
-}
-
-/* Custom component classes */
-@layer components {
-  .form-card {
-    @apply rounded-xl p-8 shadow-lg max-w-md w-full mx-auto;
-    background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(10, 10, 24, 0.9) 100%);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 215, 0, 0.1);
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 215, 0, 0.15);
-    transform: perspective(1000px) rotateX(0deg);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
   }
-
-  .form-card:hover {
-    transform: perspective(1000px) rotateX(2deg);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 215, 0, 0.2);
+  a:hover {
+    color: #747bff;
   }
-
-  .input-field {
-    @apply w-full rounded-lg px-4 py-3 transition-all;
-    background: rgba(5, 5, 14, 0.7);
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  .input-field:focus {
-    @apply outline-none;
-    border-color: var(--gold-accent);
-    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.25);
-  }
-
-  .btn-primary {
-    background: linear-gradient(135deg, var(--gold-accent) 0%, var(--gold-accent-dark) 100%);
-    color: #ffc400;
-    font-weight: 500;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    transition-property: all;
-    transition-duration: 200ms;
-    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-primary::after {
-    content: '';
-    color: #ffc400;
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
-    transform: rotate(45deg);
-    animation: shine 2s infinite;
-  }
-
-  @keyframes shine {
-    0% { transform: translateX(-100%) rotate(45deg); }
-    100% { transform: translateX(100%) rotate(45deg); }
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(255, 215, 0, 0.4);
-  }
-
-  .btn-secondary {
-    background: transparent;
-    font-weight: 500;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    transition-property: all;
-    transition-duration: 200ms;
-    border: 1px solid var(--gold-accent);
-    color: var(--gold-accent);
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
-  }
-
-  .btn-secondary:hover {
-    background-color: rgba(255, 215, 0, 0.1);
-    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.25);
-  }
-
-  .input-label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 0.25rem;
-    color: var(--gold-accent);
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
-  }
-
-  .error-message {
-    color: #ef4444;
-    font-size: 0.75rem;
-    margin-top: 0.25rem;
-  }
-
-  .page-container {
-    container-type: inline-size;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    max-width: 56rem;
-  }
-
-  .galaxy-card {
-    background: linear-gradient(135deg, rgba(26, 26, 46, 0.7) 0%, rgba(10, 10, 24, 0.8) 100%);
-    border: 1px solid rgba(255, 215, 0, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(4px);
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-  }
-  
-  .gold-text {
-    color: var(--gold-accent);
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-  }
-  
-  .neon-text {
-    color: var(--gold-accent);
-    text-shadow: 0 0 10px rgba(77, 124, 255, 0.8);
-  }
-  
-  .neon-border {
-    border: 1px solid var(--gold-accent);
-    box-shadow: 0 0 10px rgba(77, 124, 255, 0.5), inset 0 0 10px rgba(77, 124, 255, 0.2);
-  }
-  
-  .gold-border {
-    border: 1px solid var(--gold-accent);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5), inset 0 0 10px rgba(255, 215, 0, 0.2);
+  button {
+    background-color: #f9f9f9;
   }
 }

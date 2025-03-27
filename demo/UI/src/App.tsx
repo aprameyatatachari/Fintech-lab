@@ -1,168 +1,46 @@
-import { useState } from 'react';
+import { Routes, Route } from 'react-router';
+import { useState, useEffect } from 'react';
 import LandingPage from './pages/LandingPage';
-import CustomerDetailsPage from './pages/CustomerDetailsPage';
-import CustomerNamePage from './pages/CustomerNamePage';
-import CustomerProofOfIdentityPage from './pages/CustomerProofOfIdentityPage';
-import CustomerContactPage from './pages/CustomerContactPage';
-import CustomerAddressPage from './pages/CustomerAddressPage';
-import SuccessPage from './pages/SuccessPage';
+import CustomersList from './pages/CustomersList';
+import CustomerDetails from './pages/CustomerDetails';
+import CustomerFormContainer from './pages/CustomerForm/CustomerFormContainer';
+import ParallaxBackground from './components/ParallaxBackground';
+import Navbar from './components/Navbar';
+import './App.css';
 
-// Define types for our customer data structure
-export type CustomerIdentification = {
-  type: number;
-  item: string;
-};
+function App() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-export type CustomerProofOfId = {
-  type: string;
-  value: string;
-  startDate: string;
-  endDate: string;
-};
-
-export type CustomerData = {
-  firstName: string;
-  lastName: string;
-  middleName?: string;
-  dateOfBirth?: string;
-  customerIdentifications: CustomerIdentification[];
-  customerProofOfIds: CustomerProofOfId[];
-  email: string;
-  phone: string;
-  addressLine1: string;
-  addressLine2?: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-};
-
-const App = () => {
-  // State to keep track of the current page
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  
-  // State to keep track of the customer data
-  const [customerData, setCustomerData] = useState<CustomerData>({
-    firstName: '',
-    lastName: '',
-    customerIdentifications: [],
-    customerProofOfIds: [],
-    email: '',
-    phone: '',
-    addressLine1: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: '',
-  });
-
-  // Function to handle navigation between pages
-  const navigate = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-    window.scrollTo(0, 0);
-  };
-
-  // Function to update customer data
-  const updateCustomerData = (data: Partial<CustomerData>) => {
-    setCustomerData(prevData => ({
-      ...prevData,
-      ...data
-    }));
-  };
-
-  // Function to submit data to server
-  const submitCustomerData = async () => {
-    try {
-      const response = await fetch('/api/cdetail', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(customerData),
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      setMousePosition({
+        x: (event.clientX / window.innerWidth) - 0.5,
+        y: (event.clientY / window.innerHeight) - 0.5,
       });
-      
-      if (response.ok) {
-        // Navigate to success page
-        navigate(6);
-      } else {
-        throw new Error('Failed to submit data');
-      }
-    } catch (error) {
-      console.error('Error submitting customer data:', error);
-      // Handle error (could add error state and display to user)
-    }
-  };
+    };
 
-  // Render the appropriate page based on the current page number
-  const renderPage = () => {
-    switch (currentPage) {
-      case 0:
-        return <LandingPage onNext={() => navigate(1)} />;
-      case 1:
-        return (
-          <CustomerNamePage 
-            customerData={customerData} 
-            updateCustomerData={updateCustomerData} 
-            onNext={() => navigate(2)} 
-            onBack={() => navigate(0)} 
-          />
-        );
-      case 2:
-        return (
-          <CustomerProofOfIdentityPage 
-            customerData={customerData} 
-            updateCustomerData={updateCustomerData} 
-            onNext={() => navigate(3)} 
-            onBack={() => navigate(1)} 
-          />
-        );
-      case 3:
-        return (
-          <CustomerContactPage 
-            customerData={customerData} 
-            updateCustomerData={updateCustomerData} 
-            onNext={() => navigate(4)} 
-            onBack={() => navigate(2)} 
-          />
-        );
-      case 4:
-        return (
-          <CustomerAddressPage 
-            customerData={customerData} 
-            updateCustomerData={updateCustomerData} 
-            onNext={() => navigate(5)} 
-            onBack={() => navigate(3)} 
-          />
-        );
-      case 5:
-        return (
-          <CustomerDetailsPage 
-            customerData={customerData} 
-            onNext={submitCustomerData} 
-            onBack={() => navigate(4)} 
-          />
-        );
-      case 6:
-        return <SuccessPage />;
-      default:
-        return <LandingPage onNext={() => navigate(1)} />;
-    }
-  };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   return (
-    <>
-      {/* Star Background */}
-      <div className="space-background"></div>
-      
-      {/* Nebula Effect */}
-      <div className="nebula"></div>
-      
-      {/* Content */}
-      <div className="relative z-10">
-        {renderPage()}
+    <div className="app-container min-h-screen font-sans text-white relative">
+      <ParallaxBackground mousePosition={mousePosition} />
+      <div className="relative z-10 w-full min-h-screen">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/customers/view" element={<CustomersList />} />
+            <Route path="/customers/view/:id" element={<CustomerDetails />} />
+            <Route path="/customers/create/*" element={<CustomerFormContainer />} />
+          </Routes>
+        </div>
       </div>
-    </>
+    </div>
   );
-};
+}
 
 export default App;

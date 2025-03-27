@@ -1,70 +1,75 @@
 package com.lab3.demo.entity;
-import java.util.Date;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
 @Entity
 public class CustomerDetail {
- @Id
- @GeneratedValue(strategy = GenerationType.IDENTITY)
- private int CustomerIdentifier; 
- private String CustomerFullName; 
- private String CustomerGender;
- private String CustomerType; 
- private Date CustomerDateOfBirth; 
- private String CustomerPreferredLanguage; 
- private String CustomerStatus; 
- private String CustomerCountryOfOrigin;
-public int getCustomerIdentifier() {
-	return CustomerIdentifier;
-}
-public void setCustomerIdentifier(int customerIdentifier) {
-	CustomerIdentifier = customerIdentifier;
-}
-public String getCustomerFullName() {
-	return CustomerFullName;
-}
-public void setCustomerFullName(String customerFullName) {
-	CustomerFullName = customerFullName;
-}
-public String getCustomerGender() {
-	return CustomerGender;
-}
-public void setCustomerGender(String customerGender) {
-	CustomerGender = customerGender;
-}
-public String getCustomerType() {
-	return CustomerType;
-}
-public void setCustomerType(String customerType) {
-	CustomerType = customerType;
-}
-public Date getCustomerDateOfBirth() {
-	return CustomerDateOfBirth;
-}
-public void setCustomerDateOfBirth(Date customerDateOfBirth) {
-	CustomerDateOfBirth = customerDateOfBirth;
-}
-public String getCustomerPreferredLanguage() {
-	return CustomerPreferredLanguage;
-}
-public void setCustomerPreferredLanguage(String customerPreferredLanguage) {
-	CustomerPreferredLanguage = customerPreferredLanguage;
-}
-public String getCustomerStatus() {
-	return CustomerStatus;
-}
-public void setCustomerStatus(String customerStatus) {
-	CustomerStatus = customerStatus;
-}
-public String getCustomerCountryOfOrigin() {
-	return CustomerCountryOfOrigin;
-}
-public void setCustomerCountryOfOrigin(String customerCountryOfOrigin) {
-	CustomerCountryOfOrigin = customerCountryOfOrigin;
-} 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
- 
+	@OneToOne(cascade = CascadeType.ALL)
+	private CustomerNames name;
+
+	private LocalDate dateOfBirth;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<CustomerContactInformation> contactDetails;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private CustomerAddress address;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<CustomerProofOfId> identityProofs;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public CustomerNames getName() {
+		return name;
+	}
+
+	public void setName(CustomerNames name) {
+		this.name = name;
+	}
+	
+	public LocalDate getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(LocalDate dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public List<CustomerContactInformation> getContactDetails() {
+		return contactDetails;
+	}
+
+	public void setContactDetails(List<CustomerContactInformation> contactDetails) {
+		this.contactDetails = contactDetails;
+	}
+
+	public CustomerAddress getAddress() {
+		return address;
+	}
+
+	public void setAddress(CustomerAddress address) {
+		this.address = address;
+	}
+
+	public List<CustomerProofOfId> getIdentityProofs() {
+		return identityProofs;
+	}
+
+	public void setIdentityProofs(List<CustomerProofOfId> identityProofs) {
+		this.identityProofs = identityProofs;
+	}
 }

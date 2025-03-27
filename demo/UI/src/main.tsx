@@ -1,19 +1,21 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router';
 import './index.css'
 import App from './App.tsx'
+import { Toaster } from 'react-hot-toast'
+import { startMockWorker } from './setupMockApi'
 
-// Add a style tag to ensure the body background color is set
-const style = document.createElement('style')
-style.textContent = `
-  body {
-    background-color: #0a0a18 !important;
-  }
-`
-document.head.appendChild(style)
-
+// Initialize mock API for development
+// Initialize mock API for development
+if (import.meta.env.MODE === 'development') {
+  startMockWorker();
+}
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <App />
+      <Toaster position="top-right" />
+    </BrowserRouter>
   </StrictMode>,
 )
