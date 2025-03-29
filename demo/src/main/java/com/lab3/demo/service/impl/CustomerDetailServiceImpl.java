@@ -38,6 +38,8 @@ public class CustomerDetailServiceImpl implements CustomerDetailService {
 			customerDetails.setContactDetails(newCustomerDetails.getContactDetails());
 			customerDetails.setAddress(newCustomerDetails.getAddress());
 			customerDetails.setIdentityProofs(newCustomerDetails.getIdentityProofs());
+			customerDetails.setLanguage(newCustomerDetails.getLanguage());
+			customerDetails.setGender(newCustomerDetails.getGender());
 			return customerDetailsRepository.save(customerDetails);
 		}).orElseThrow(() -> new RuntimeException("Customer details not found with id: " + id));
 	}

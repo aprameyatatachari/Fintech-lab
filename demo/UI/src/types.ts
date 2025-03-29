@@ -32,4 +32,6 @@ export interface CustomerDetail {
   contactDetails: CustomerContactInformation[];
   address: CustomerAddress;
   identityProofs: CustomerProofOfId[];
+  language?: string
+  gender?: string
 }

@@ -5,10 +5,10 @@ const LandingPage = () => {
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="text-center max-w-4xl mx-auto px-4 py-16">
         <h1 className="font-display text-6xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gold-light via-gold to-gold-dark">
-          Customer Portal
+          Fintech Lab Customer Portal
         </h1>
         <p className="text-xl md:text-2xl text-star-white/80 mb-12 max-w-2xl mx-auto">
-          Fintech Lab, Aprameya Tatachari, 230958006
+        Aprameya Tatachari, 230958006
         </p>
         
         <div className="flex flex-col sm:flex-row gap-6 justify-center">

@@ -25,6 +25,25 @@ public class CustomerDetail {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<CustomerProofOfId> identityProofs;
 
+	private String gender;
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	private String language;
+
 	public Long getId() {
 		return id;
 	}
@@ -40,7 +59,7 @@ public class CustomerDetail {
 	public void setName(CustomerNames name) {
 		this.name = name;
 	}
-	
+
 	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
